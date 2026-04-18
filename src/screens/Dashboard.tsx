@@ -146,18 +146,42 @@ function HearingCalendarCard() {
   );
 }
 
+type Outcome = "Passed" | "Reserved" | "Ex-parte";
+const AWARD_CUSTOMERS: Record<Outcome, { caseId: string; customer: string; amount: string; date: string }[]> = {
+  Passed: [
+    { caseId: "ARB-2024-331", customer: "RAJESH KUMAR VERMA", amount: "₹4.2 Cr", date: "Mar 18, 2026" },
+    { caseId: "ARB-2022-101", customer: "ANIL DESHPANDE", amount: "₹2.8 Cr", date: "Feb 12, 2026" },
+    { caseId: "ARB-2023-192", customer: "GOVT OF ANDHRA PRADESH", amount: "₹44.0 Cr", date: "Jan 28, 2026" },
+    { caseId: "ARB-2023-112", customer: "UNION BANK", amount: "₹1.6 Cr", date: "Jan 15, 2026" },
+  ],
+  Reserved: [
+    { caseId: "ARB-2024-102", customer: "DELHI DISCOMS LTD", amount: "₹22.5 Cr", date: "Mar 8, 2026" },
+    { caseId: "ARB-2023-445", customer: "ROAD CORP PVT LTD", amount: "₹94.3 Cr", date: "Feb 22, 2026" },
+    { caseId: "ARB-2024-208", customer: "NATIONAL HIGHWAYS AUTHORITY", amount: "₹7.9 Cr", date: "Feb 6, 2026" },
+  ],
+  "Ex-parte": [
+    { caseId: "ARB-2025-017", customer: "SURESH BABU REDDY", amount: "₹12.4 Cr", date: "Feb 28, 2026" },
+    { caseId: "ARB-2024-089", customer: "MAHESHWARAM NAGARAJU", amount: "₹5.2 Cr", date: "Feb 14, 2026" },
+  ],
+};
+
 function AwardOutcomes() {
-  const segs = [
+  const { navigate, cases } = useApp();
+  const segs: { label: Outcome; value: number; pct: number; color: string }[] = [
     { label: "Passed", value: 142, pct: 58.4, color: "#166534" },
     { label: "Reserved", value: 89, pct: 36.6, color: "#92400e" },
     { label: "Ex-parte", value: 12, pct: 4.9, color: "#c0392b" },
   ];
   const C = 2 * Math.PI * 60;
+  const [hovered, setHovered] = useState<Outcome | null>(null);
+  const [selected, setSelected] = useState<Outcome | null>(null);
   let acc = 0;
+  const exists = (id: string) => cases.some(c => c.id === id);
+
   return (
     <div className="bg-card border border-line-card rounded-[11px] card-shadow p-5">
       <h3 className="font-serif font-bold text-[16px] text-ink-body">🏆 Award Outcomes</h3>
-      <div className="text-[11.5px] text-ink-muted mb-4">FY 2025-26 · 243 awards</div>
+      <div className="text-[11.5px] text-ink-muted mb-4">FY 2025-26 · 243 awards · <span className="italic">click a segment to see customers</span></div>
       <div className="flex items-center gap-6">
         <svg width="160" height="160" viewBox="0 0 160 160" className="-rotate-90">
           <circle cx="80" cy="80" r="60" fill="none" stroke="#eceae3" strokeWidth="22" />
@@ -166,24 +190,90 @@ function AwardOutcomes() {
             const dash = `${len} ${C - len}`;
             const off = -acc;
             acc += len;
-            return <circle key={s.label} cx="80" cy="80" r="60" fill="none" stroke={s.color} strokeWidth="22" strokeDasharray={dash} strokeDashoffset={off} />;
+            const isHover = hovered === s.label;
+            const isSel = selected === s.label;
+            const dim = (hovered || selected) && !isHover && !isSel;
+            return (
+              <circle
+                key={s.label} cx="80" cy="80" r="60" fill="none"
+                stroke={s.color}
+                strokeWidth={isHover || isSel ? 28 : 22}
+                strokeDasharray={dash} strokeDashoffset={off}
+                opacity={dim ? 0.35 : 1}
+                style={{ cursor: "pointer", transition: "all 0.2s" }}
+                onMouseEnter={() => setHovered(s.label)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() => setSelected(prev => prev === s.label ? null : s.label)}
+              />
+            );
           })}
-          <text x="80" y="76" textAnchor="middle" className="fill-ink-body font-serif font-bold" fontSize="18" transform="rotate(90 80 80)">243</text>
-          <text x="80" y="92" textAnchor="middle" className="fill-ink-muted" fontSize="10" transform="rotate(90 80 80)">Awards</text>
+          <text x="80" y="76" textAnchor="middle" className="fill-ink-body font-serif font-bold" fontSize="18" transform="rotate(90 80 80)">
+            {hovered ? AWARD_CUSTOMERS[hovered].length : selected ? AWARD_CUSTOMERS[selected].length : 243}
+          </text>
+          <text x="80" y="92" textAnchor="middle" className="fill-ink-muted" fontSize="10" transform="rotate(90 80 80)">
+            {hovered || selected || "Awards"}
+          </text>
         </svg>
         <div className="flex-1 space-y-2">
           {segs.map(s => (
-            <div key={s.label} className="flex items-center gap-2 text-[12.5px]">
+            <button
+              key={s.label}
+              onMouseEnter={() => setHovered(s.label)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => setSelected(prev => prev === s.label ? null : s.label)}
+              className={cn("w-full flex items-center gap-2 text-[12.5px] px-2 py-1 rounded transition",
+                selected === s.label ? "bg-surface-input" : "hover:bg-surface-subtle")}
+            >
               <span className="w-3 h-3 rounded-sm" style={{ background: s.color }} />
               <span className="text-ink-body font-medium">{s.label}</span>
               <span className="text-ink-muted ml-auto">{s.value} ({s.pct}%)</span>
-            </div>
+            </button>
           ))}
           <div className="mt-3 bg-brand-red-light border border-brand-red/20 rounded-md px-3 py-2 text-[12px] text-brand-red-dark">
             Challenged post-award: <b>31 cases (12.8%)</b>
           </div>
         </div>
       </div>
+
+      {selected && (
+        <div className="mt-4 border-t border-line-card pt-4 animate-fade-up">
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">
+              {selected} Awards · {AWARD_CUSTOMERS[selected].length} customers
+            </div>
+            <button onClick={() => setSelected(null)} className="text-[11px] text-ink-muted hover:text-ink-body">✕ Close</button>
+          </div>
+          <div className="rounded-md border border-line-card overflow-hidden">
+            <table className="w-full text-[12px]">
+              <thead className="bg-surface-input">
+                <tr className="text-left text-[10.5px] uppercase tracking-wide text-ink-muted">
+                  <th className="px-3 py-2 font-semibold">Case ID</th>
+                  <th className="px-3 py-2 font-semibold">Customer</th>
+                  <th className="px-3 py-2 font-semibold">Amount</th>
+                  <th className="px-3 py-2 font-semibold">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {AWARD_CUSTOMERS[selected].map((row, i) => (
+                  <tr key={i} className={cn("border-t border-line-card", i % 2 === 1 && "bg-surface-input/40")}>
+                    <td className="px-3 py-2">
+                      <button
+                        disabled={!exists(row.caseId)}
+                        onClick={() => exists(row.caseId) && navigate({ name: "case", id: row.caseId })}
+                        className={cn("font-bold", exists(row.caseId) ? "text-brand-blue hover:underline" : "text-ink-muted")}>
+                        {row.caseId}
+                      </button>
+                    </td>
+                    <td className="px-3 py-2 text-ink-body">{row.customer}</td>
+                    <td className="px-3 py-2 text-ink-body font-semibold">{row.amount}</td>
+                    <td className="px-3 py-2 text-ink-muted">{row.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
