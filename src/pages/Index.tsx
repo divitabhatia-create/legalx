@@ -1,16 +1,33 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { AppProvider, useApp } from "@/state/AppContext";
+import { Topbar } from "@/components/Topbar";
+import { Dashboard } from "@/screens/Dashboard";
+import { CasesScreen } from "@/screens/CasesScreen";
+import { DeadlinesScreen } from "@/screens/DeadlinesScreen";
+import { CalendarScreen } from "@/screens/CalendarScreen";
+import { CaseDetailScreen } from "@/screens/CaseDetailScreen";
+import { CreateCaseModal } from "@/components/CreateCaseModal";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+function Router() {
+  const { view } = useApp();
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <main className="max-w-[1480px] mx-auto px-6 py-6">
+      {view.name === "dashboard" && <Dashboard />}
+      {view.name === "cases" && <CasesScreen />}
+      {view.name === "deadlines" && <DeadlinesScreen />}
+      {view.name === "calendar" && <CalendarScreen />}
+      {view.name === "case" && <CaseDetailScreen id={view.id} />}
+    </main>
   );
-};
+}
 
-const Index = PlaceholderIndex;
+const Index = () => (
+  <AppProvider>
+    <div className="min-h-screen bg-background">
+      <Topbar />
+      <Router />
+      <CreateCaseModal />
+    </div>
+  </AppProvider>
+);
 
 export default Index;
