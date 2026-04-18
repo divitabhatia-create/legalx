@@ -155,36 +155,6 @@ function OverviewTab({ c }: { c: CaseRecord }) {
 
   return (
     <div className="space-y-5">
-      {/* Procedural Timeline */}
-      <div>
-        <div className="text-[10px] uppercase tracking-wide text-ink-muted font-semibold mb-3">PROCEDURAL TIMELINE</div>
-        <div className="flex items-center">
-          {PROC_NODES.map((label, i) => {
-            const completed = i < procIdx;
-            const active = i === procIdx;
-            return (
-              <div key={label} className="flex items-center flex-1 last:flex-initial">
-                <div className="flex flex-col items-center">
-                  <div className={cn("w-7 h-7 rounded-full grid place-items-center transition",
-                    completed ? "bg-brand-blue" : active ? "bg-card border-2 border-brand-blue" : "bg-surface-subtle border border-line-dark"
-                  )}
-                       style={active ? { boxShadow: "0 0 0 4px hsl(var(--brand-blue-light))" } : undefined}>
-                    {completed && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
-                    {active && <span className="w-2 h-2 rounded-full bg-brand-blue" />}
-                    {!completed && !active && <span className="w-1.5 h-1.5 rounded-full bg-ink-xmuted" />}
-                  </div>
-                  <div className={cn("mt-2 text-[11px] font-semibold",
-                    completed || active ? "text-brand-blue" : "text-ink-muted")}>{label}</div>
-                </div>
-                {i < PROC_NODES.length - 1 && (
-                  <div className={cn("flex-1 h-[2px] mx-1 -mt-5", completed ? "bg-brand-blue" : "bg-line-dark")} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Latest Update */}
       <div className="border-l-[3px] border-brand-blue pl-3 py-1">
         <div className="text-[9.5px] uppercase tracking-wide text-ink-muted font-semibold">● LATEST UPDATE · {latest?.ts || "—"}</div>
@@ -201,34 +171,8 @@ function OverviewTab({ c }: { c: CaseRecord }) {
         <div className="text-[11.5px] text-ink-muted mt-0.5">{dl.desc}</div>
       </div>
 
-      {/* Stage Tracker + Next Hearings */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <div className="text-[10px] uppercase tracking-wide text-ink-muted font-semibold mb-3">STAGE TRACKER</div>
-          <div className="space-y-3">
-            {STAGE_NODES.map((s, i) => {
-              const completed = i < stageIdx;
-              const active = i === stageIdx;
-              return (
-                <div key={s.key} className="flex items-center gap-3">
-                  <div className={cn("w-6 h-6 rounded-full grid place-items-center shrink-0",
-                    completed ? "bg-brand-green" : active ? "bg-card border-2 border-brand-green" : "bg-surface-subtle border border-line-dark"
-                  )}
-                       style={active ? { boxShadow: "0 0 0 4px hsl(var(--brand-green-light))" } : undefined}>
-                    {completed && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                    {active && <span className="w-1.5 h-1.5 rounded-full bg-brand-green" />}
-                  </div>
-                  <div className={cn("text-[12.5px]", completed || active ? "text-ink-body font-semibold" : "text-ink-muted")}>{s.label}</div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-4 flex gap-2">
-            <button className="h-8 px-3 rounded-md bg-brand-red text-white text-[11.5px] font-semibold">Update Stage</button>
-            <button className="h-8 px-3 rounded-md text-ink-light text-[11.5px] font-semibold hover:bg-surface-input">Add Document</button>
-          </div>
-        </div>
-
+      {/* Next Hearings */}
+      <div>
         <div>
           <div className="text-[10px] uppercase tracking-wide text-ink-muted font-semibold mb-3">NEXT HEARINGS</div>
           <div className="space-y-2">
