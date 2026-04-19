@@ -31,7 +31,8 @@ export function DeadlinesScreen() {
                 <span className={cn("w-2.5 h-2.5 rounded-full shrink-0", dot)} />
                 <span className="font-bold text-brand-blue text-[12.5px] w-[120px]">{d.caseId}</span>
                 <span className="flex-1 text-[12.5px] text-ink-body">{d.step}</span>
-                <span className="w-[140px] text-[12px] text-ink-muted">{d.party}</span>
+                <span className="w-[110px] text-[12px] font-semibold text-ink-body">{d.lender}</span>
+                <span className="w-[140px] text-[12px] text-ink-muted truncate">{d.party}</span>
                 <span className={cn("w-[60px] text-[12px] font-semibold", dateColor)}>{d.date}</span>
                 <span className="w-[80px] text-right text-[11.5px] text-ink-muted">
                   {d.daysOffset < 0 ? `${Math.abs(d.daysOffset)}d overdue` : `in ${d.daysOffset}d`}
