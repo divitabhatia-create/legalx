@@ -60,12 +60,12 @@ export const STAGE_LABEL: Record<Stage, string> = {
 };
 
 export const STAGE_FUNNEL: { key: Stage; label: string; count: number; color: string }[] = [
-  { key: "lrn", label: "LRN SENT", count: 45, color: "#1a5276" },
-  { key: "sec21", label: "SEC 21 NOTICE", count: 38, color: "#2471a3" },
-  { key: "claim", label: "STMT OF CLAIM", count: 28, color: "#0e7490" },
-  { key: "ref", label: "REF LETTER", count: 22, color: "#0a7d6e" },
-  { key: "sec17", label: "SEC 17 ORDER", count: 31, color: "#6b3fa0" },
-  { key: "active", label: "ARB ACTIVE", count: 67, color: "#1a7a4a" },
+  { key: "lrn", label: "LRN SENT", count: 42, color: "#1a5276" },
+  { key: "sec21", label: "SEC 21 NOTICE", count: 35, color: "#2471a3" },
+  { key: "claim", label: "STMT OF CLAIM", count: 31, color: "#0e7490" },
+  { key: "ref", label: "REF LETTER", count: 24, color: "#0a7d6e" },
+  { key: "sec17", label: "SEC 17 ORDER", count: 28, color: "#6b3fa0" },
+  { key: "active", label: "ARB ACTIVE", count: 55, color: "#1a7a4a" },
 ];
 
 export const ARBITRATORS = [

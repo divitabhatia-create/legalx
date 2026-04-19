@@ -24,10 +24,10 @@ export function Dashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-4">
-        <Kpi label="Total Active Cases" value={215} top="#1e4d8c" delta="▲ 8.3% vs last year" deltaTone="green" />
-        <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" delta="▼ 3 days slower" deltaTone="red" />
-        <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" delta="Duration 73 days" deltaTone="green" />
-        <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" delta="— Steady" deltaTone="grey" />
+        <Kpi label="Total Active Cases" value={215} top="#1e4d8c" />
+        <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" />
+        <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" />
+        <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" />
       </div>
 
       {/* Pipeline + Deadlines */}
@@ -46,10 +46,7 @@ export function Dashboard() {
   );
 }
 
-function Kpi({ label, value, prefix, suffix, top, delta, deltaTone, decimals }: { label: string; value: number; prefix?: string; suffix?: string; top: string; delta: string; deltaTone: "green" | "red" | "grey"; decimals?: number }) {
-  const tone = deltaTone === "green" ? "bg-brand-green-light text-brand-green-dark"
-    : deltaTone === "red" ? "bg-brand-red-light text-brand-red-dark"
-    : "bg-surface-subtle text-ink-muted";
+function Kpi({ label, value, prefix, suffix, top, decimals }: { label: string; value: number; prefix?: string; suffix?: string; top: string; decimals?: number }) {
   return (
     <div className="bg-card border border-line-card rounded-[11px] card-shadow overflow-hidden">
       <div className="h-[3px]" style={{ background: top }} />
@@ -58,7 +55,6 @@ function Kpi({ label, value, prefix, suffix, top, delta, deltaTone, decimals }: 
         <div className="mt-2 font-serif text-[28px] font-bold text-ink-body leading-none">
           <CountUp to={value} prefix={prefix} suffix={suffix} decimals={decimals} />
         </div>
-        <div className={cn("mt-3 inline-block px-2 py-0.5 rounded-full text-[10.5px] font-semibold", tone)}>{delta}</div>
       </div>
     </div>
   );
