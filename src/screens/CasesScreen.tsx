@@ -1,24 +1,33 @@
-import { useMemo, useState } from "react";
-import { X, Plus, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { X, Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useApp } from "@/state/AppContext";
 import { STAGE_LABEL, Status } from "@/data/cases";
 import { StatusBadge } from "@/components/StatusBadge";
 import { cn } from "@/lib/utils";
 
 const FILTERS: ("All" | Status)[] = ["All", "active", "overdue", "hold", "urgent"];
+const PAGE_SIZE = 20;
 
 export function CasesScreen() {
   const { cases, view, navigate, setCreateOpen } = useApp();
   const stageFilter = view.name === "cases" ? view.stageFilter : undefined;
   const [pill, setPill] = useState<typeof FILTERS[number]>("All");
   const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => cases.filter(c => {
     if (stageFilter && c.stage !== stageFilter) return false;
     if (pill !== "All" && c.status !== pill) return false;
-    if (q && !`${c.id} ${c.claimant} ${c.respondent}`.toLowerCase().includes(q.toLowerCase())) return false;
+    if (q && !`${c.id} ${c.lan} ${c.claimant} ${c.respondent} ${c.respondentFull}`.toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   }), [cases, stageFilter, pill, q]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  useEffect(() => { setPage(1); }, [pill, q, stageFilter]);
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, filtered.length);
+  const paged = filtered.slice(start, end);
 
   return (
     <div className="bg-card border border-line-card rounded-[11px] card-shadow p-5 animate-fade-up">
