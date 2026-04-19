@@ -281,15 +281,25 @@ export interface DeadlineItem {
   caseId: string;
   step: string;
   party: string;
+  lender: string;
   date: string;
   daysOffset: number; // negative = overdue, positive = upcoming
 }
 export const DEADLINES: DeadlineItem[] = [
-  { caseId: "ARB-2024-089", step: "Sec 21 Response Due", party: "M/s Reliance", date: "Mar 7", daysOffset: -2 },
-  { caseId: "ARB-2024-102", step: "Statement of Claim", party: "Tata Power", date: "Mar 8", daysOffset: -1 },
-  { caseId: "ARB-2023-445", step: "Counter-claim Filing", party: "NHAI", date: "Mar 11", daysOffset: 3 },
-  { caseId: "ARB-2025-017", step: "Interim Order Hearing", party: "IREDA", date: "Mar 13", daysOffset: 5 },
-  { caseId: "ARB-2024-208", step: "Document Submission", party: "L&T Infra", date: "Mar 15", daysOffset: 7 },
-  { caseId: "ARB-2024-331", step: "Final Award Reserved", party: "ONGC Ltd", date: "Mar 18", daysOffset: 10 },
-  { caseId: "ARB-2023-192", step: "Cross-examination", party: "BHEL", date: "Mar 20", daysOffset: 12 },
+  { caseId: "CR//12//2026", step: "Sec 21 Response Due", party: "PESINGU KISHORE", lender: "CredRight", date: "Mar 5", daysOffset: -4 },
+  { caseId: "CR//28//2026", step: "Statement of Claim", party: "RAMESH NAIR", lender: "CSB Bank", date: "Mar 6", daysOffset: -3 },
+  { caseId: "CR//44//2026", step: "Reply to LRN", party: "ANIL VERMA", lender: "DCB Bank", date: "Mar 7", daysOffset: -2 },
+  { caseId: "CR//61//2026", step: "Document Submission", party: "MEENA SHARMA", lender: "Equitas", date: "Mar 8", daysOffset: -1 },
+  { caseId: "CR//77//2026", step: "Counter-claim Filing", party: "VIKAS GUPTA", lender: "CredRight", date: "Mar 11", daysOffset: 2 },
+  { caseId: "CR//94//2026", step: "Sec 17 Application", party: "PRIYA IYER", lender: "CSB Bank", date: "Mar 12", daysOffset: 3 },
+  { caseId: "CR//108//2026", step: "Interim Order Hearing", party: "SURESH BABU", lender: "DCB Bank", date: "Mar 13", daysOffset: 4 },
+  { caseId: "CR//125//2026", step: "Reference Letter Reply", party: "KAVITA RAO", lender: "Equitas", date: "Mar 14", daysOffset: 5 },
+  { caseId: "CR//141//2026", step: "Statement of Defence", party: "RAJESH KUMAR", lender: "CredRight", date: "Mar 15", daysOffset: 6 },
+  { caseId: "CR//156//2026", step: "Evidence Filing", party: "SUNIL MEHTA", lender: "CSB Bank", date: "Mar 16", daysOffset: 7 },
+  { caseId: "CR//170//2026", step: "Cross-examination", party: "DEEPAK JOSHI", lender: "DCB Bank", date: "Mar 18", daysOffset: 9 },
+  { caseId: "CR//184//2026", step: "Final Arguments", party: "NEHA KAPOOR", lender: "Equitas", date: "Mar 20", daysOffset: 11 },
+  { caseId: "CR//197//2026", step: "Award Pronouncement", party: "ARJUN PATEL", lender: "CredRight", date: "Mar 22", daysOffset: 13 },
+  { caseId: "CR//205//2026", step: "Sec 21 Notice Service", party: "POOJA SINGH", lender: "CSB Bank", date: "Mar 25", daysOffset: 16 },
+  { caseId: "CR//212//2026", step: "Tribunal Constitution", party: "MANOJ TIWARI", lender: "DCB Bank", date: "Mar 28", daysOffset: 19 },
+  { caseId: "CR//215//2026", step: "Preliminary Hearing", party: "SHALINI DAS", lender: "Equitas", date: "Apr 2", daysOffset: 24 },
 ];
