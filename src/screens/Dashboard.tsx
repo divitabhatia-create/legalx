@@ -24,10 +24,10 @@ export function Dashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-4 gap-4">
-        <Kpi label="Total Active Cases" value={179} top="#1e4d8c" delta="▲ 8.3% vs last year" deltaTone="green" />
-        <Kpi label="Avg Resolution" value={47} suffix=" days" top="#92400e" delta="▼ 3 days slower" deltaTone="red" />
-        <Kpi label="Settlement Rate" value={23} suffix="%" top="#166534" delta="▲ 2.1% this quarter" deltaTone="green" />
-        <Kpi label="Total Claim Value" value={842} prefix="₹" suffix=" Cr" top="#c0392b" delta="— Steady" deltaTone="grey" />
+        <Kpi label="Total Active Cases" value={215} top="#1e4d8c" delta="▲ 8.3% vs last year" deltaTone="green" />
+        <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" delta="▼ 3 days slower" deltaTone="red" />
+        <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" delta="Duration 73 days" deltaTone="green" />
+        <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" delta="— Steady" deltaTone="grey" />
       </div>
 
       {/* Pipeline + Deadlines */}
