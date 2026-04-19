@@ -76,7 +76,11 @@ export const ARBITRATORS = [
   { name: "Justice D. Singh", load: 21 },
 ];
 
-export const initialCases: CaseRecord[] = [
+import { REAL_CASES } from "./realCases";
+
+export const initialCases: CaseRecord[] = REAL_CASES;
+
+const _LEGACY_CASES_UNUSED: CaseRecord[] = [
   {
     id: "ARB-2024-089", lan: "CRFLAN100015091", campaign: "CMPCRIGHT_J75jwlXW",
     claimant: "M/s Reliance", respondent: "Shaik Pasha", respondentFull: "MAHESHWARAM NAGARAJU",

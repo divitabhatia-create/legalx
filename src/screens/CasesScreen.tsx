@@ -1,24 +1,33 @@
-import { useMemo, useState } from "react";
-import { X, Plus, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { X, Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { useApp } from "@/state/AppContext";
 import { STAGE_LABEL, Status } from "@/data/cases";
 import { StatusBadge } from "@/components/StatusBadge";
 import { cn } from "@/lib/utils";
 
 const FILTERS: ("All" | Status)[] = ["All", "active", "overdue", "hold", "urgent"];
+const PAGE_SIZE = 20;
 
 export function CasesScreen() {
   const { cases, view, navigate, setCreateOpen } = useApp();
   const stageFilter = view.name === "cases" ? view.stageFilter : undefined;
   const [pill, setPill] = useState<typeof FILTERS[number]>("All");
   const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => cases.filter(c => {
     if (stageFilter && c.stage !== stageFilter) return false;
     if (pill !== "All" && c.status !== pill) return false;
-    if (q && !`${c.id} ${c.claimant} ${c.respondent}`.toLowerCase().includes(q.toLowerCase())) return false;
+    if (q && !`${c.id} ${c.lan} ${c.claimant} ${c.respondent} ${c.respondentFull}`.toLowerCase().includes(q.toLowerCase())) return false;
     return true;
   }), [cases, stageFilter, pill, q]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  useEffect(() => { setPage(1); }, [pill, q, stageFilter]);
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, filtered.length);
+  const paged = filtered.slice(start, end);
 
   return (
     <div className="bg-card border border-line-card rounded-[11px] card-shadow p-5 animate-fade-up">
@@ -61,7 +70,7 @@ export function CasesScreen() {
             </tr>
           </thead>
           <tbody className="divide-y divide-line-card bg-card">
-            {filtered.map(c => (
+            {paged.map(c => (
               <tr key={c.id} onClick={() => navigate({ name: "case", id: c.id })} className="cursor-pointer row-hover transition-colors">
                 <td className="px-3 py-2.5 font-bold text-brand-blue">{c.id}</td>
                 <td className="px-3 py-2.5 text-ink-body">{c.claimant}</td>
@@ -79,7 +88,28 @@ export function CasesScreen() {
         </table>
       </div>
 
-      <div className="mt-3 text-[11px] text-ink-muted">Showing {filtered.length} of {cases.length} cases</div>
+      <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="text-[11px] text-ink-muted">
+          {filtered.length === 0
+            ? `Showing 0 of ${cases.length} cases`
+            : `Showing ${start + 1}–${end} of ${filtered.length} cases${filtered.length !== cases.length ? ` (filtered from ${cases.length})` : ""}`}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={currentPage <= 1}
+            className="h-8 px-2.5 rounded-md border border-line-card bg-card text-[11.5px] font-semibold text-ink-body inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-input">
+            <ChevronLeft className="w-3.5 h-3.5" /> Previous
+          </button>
+          <span className="text-[11.5px] text-ink-light font-medium">Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage >= totalPages}
+            className="h-8 px-2.5 rounded-md border border-line-card bg-card text-[11.5px] font-semibold text-ink-body inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-input">
+            Next <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
