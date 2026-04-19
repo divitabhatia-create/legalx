@@ -26,7 +26,7 @@ export function Dashboard() {
       <div className="grid grid-cols-4 gap-4">
         <Kpi label="Total Active Cases" value={215} top="#1e4d8c" />
         <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" />
-        <Kpi label="RoR Duration" value={73} suffix=" days" top="#166534" />
+        <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" sub="Duration: 73 days" />
         <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" />
       </div>
 
@@ -46,7 +46,7 @@ export function Dashboard() {
   );
 }
 
-function Kpi({ label, value, prefix, suffix, top, decimals }: { label: string; value: number; prefix?: string; suffix?: string; top: string; decimals?: number }) {
+function Kpi({ label, value, prefix, suffix, top, decimals, sub }: { label: string; value: number; prefix?: string; suffix?: string; top: string; decimals?: number; sub?: string }) {
   return (
     <div className="bg-card border border-line-card rounded-[11px] card-shadow overflow-hidden">
       <div className="h-[3px]" style={{ background: top }} />
@@ -55,6 +55,7 @@ function Kpi({ label, value, prefix, suffix, top, decimals }: { label: string; v
         <div className="mt-2 font-serif text-[28px] font-bold text-ink-body leading-none">
           <CountUp to={value} prefix={prefix} suffix={suffix} decimals={decimals} />
         </div>
+        {sub && <div className="mt-2 text-[12px] text-ink-light font-medium">{sub}</div>}
       </div>
     </div>
   );
