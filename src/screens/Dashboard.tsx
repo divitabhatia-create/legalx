@@ -46,7 +46,7 @@ export function Dashboard() {
   );
 }
 
-function Kpi({ label, value, prefix, suffix, top, delta, deltaTone }: { label: string; value: number; prefix?: string; suffix?: string; top: string; delta: string; deltaTone: "green" | "red" | "grey" }) {
+function Kpi({ label, value, prefix, suffix, top, delta, deltaTone, decimals }: { label: string; value: number; prefix?: string; suffix?: string; top: string; delta: string; deltaTone: "green" | "red" | "grey"; decimals?: number }) {
   const tone = deltaTone === "green" ? "bg-brand-green-light text-brand-green-dark"
     : deltaTone === "red" ? "bg-brand-red-light text-brand-red-dark"
     : "bg-surface-subtle text-ink-muted";
@@ -56,7 +56,7 @@ function Kpi({ label, value, prefix, suffix, top, delta, deltaTone }: { label: s
       <div className="p-4">
         <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">{label}</div>
         <div className="mt-2 font-serif text-[28px] font-bold text-ink-body leading-none">
-          <CountUp to={value} prefix={prefix} suffix={suffix} />
+          <CountUp to={value} prefix={prefix} suffix={suffix} decimals={decimals} />
         </div>
         <div className={cn("mt-3 inline-block px-2 py-0.5 rounded-full text-[10.5px] font-semibold", tone)}>{delta}</div>
       </div>
