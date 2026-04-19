@@ -70,7 +70,7 @@ export function CasesScreen() {
             </tr>
           </thead>
           <tbody className="divide-y divide-line-card bg-card">
-            {filtered.map(c => (
+            {paged.map(c => (
               <tr key={c.id} onClick={() => navigate({ name: "case", id: c.id })} className="cursor-pointer row-hover transition-colors">
                 <td className="px-3 py-2.5 font-bold text-brand-blue">{c.id}</td>
                 <td className="px-3 py-2.5 text-ink-body">{c.claimant}</td>
@@ -88,7 +88,28 @@ export function CasesScreen() {
         </table>
       </div>
 
-      <div className="mt-3 text-[11px] text-ink-muted">Showing {filtered.length} of {cases.length} cases</div>
+      <div className="mt-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="text-[11px] text-ink-muted">
+          {filtered.length === 0
+            ? `Showing 0 of ${cases.length} cases`
+            : `Showing ${start + 1}–${end} of ${filtered.length} cases${filtered.length !== cases.length ? ` (filtered from ${cases.length})` : ""}`}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={currentPage <= 1}
+            className="h-8 px-2.5 rounded-md border border-line-card bg-card text-[11.5px] font-semibold text-ink-body inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-input">
+            <ChevronLeft className="w-3.5 h-3.5" /> Previous
+          </button>
+          <span className="text-[11.5px] text-ink-light font-medium">Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage >= totalPages}
+            className="h-8 px-2.5 rounded-md border border-line-card bg-card text-[11.5px] font-semibold text-ink-body inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-surface-input">
+            Next <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
