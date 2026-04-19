@@ -26,7 +26,7 @@ export function Dashboard() {
       <div className="grid grid-cols-4 gap-4">
         <Kpi label="Total Active Cases" value={215} top="#1e4d8c" />
         <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" />
-        <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" />
+        <Kpi label="RoR Duration" value={73} suffix=" days" top="#166534" />
         <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" />
       </div>
 

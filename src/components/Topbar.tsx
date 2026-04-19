@@ -39,8 +39,8 @@ export function Topbar() {
       <div className="h-full px-6 flex items-center gap-6">
         {/* Logo */}
         <button onClick={() => navigate({ name: "dashboard" })} className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-brand-red text-white grid place-items-center font-serif font-bold text-sm">A</div>
-          <span className="font-serif font-bold text-[17px] text-ink-body">ArbitraPro</span>
+          <div className="w-7 h-7 rounded-md bg-brand-red text-white grid place-items-center font-serif font-bold text-sm">L</div>
+          <span className="font-serif font-bold text-[17px] text-ink-body">LegalX</span>
         </button>
 
         {/* Nav */}
