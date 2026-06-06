@@ -527,7 +527,7 @@ function AssignModal({ vendors, totalCases, onClose }: { vendors: Vendor[]; tota
       const raw = vendors.map(v => Math.floor((v.resolution / sum) * totalCases));
       const rem = totalCases - raw.reduce((a, b) => a + b, 0);
       raw[0] += rem;
-      return vendors.reduce((acc, v, i) => ({ ...acc, [v.id]: raw[i] }), {});
+      return vendors.reduce((acc, v, i) => ({ ...acc, [v.id]: raw[i] }), {} as Record<string, number>);
     }
     return custom;
   }, [mode, vendors, totalCases, custom]);
