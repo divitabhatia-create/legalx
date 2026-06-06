@@ -532,7 +532,7 @@ function AssignModal({ vendors, totalCases, onClose }: { vendors: Vendor[]; tota
     return custom;
   }, [mode, vendors, totalCases, custom]);
 
-  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  const total = Object.values(counts).reduce<number>((a, b) => a + (b as number), 0);
   const valid = total === totalCases;
 
   if (done) {
