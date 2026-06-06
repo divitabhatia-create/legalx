@@ -6,6 +6,7 @@ import { DeadlinesScreen } from "@/screens/DeadlinesScreen";
 import { CalendarScreen } from "@/screens/CalendarScreen";
 import { CaseDetailScreen } from "@/screens/CaseDetailScreen";
 import { CreateCaseModal } from "@/components/CreateCaseModal";
+import { VendorsScreen } from "@/screens/VendorsScreen";
 
 function Router() {
   const { view } = useApp();
@@ -15,6 +16,7 @@ function Router() {
       {view.name === "cases" && <CasesScreen />}
       {view.name === "deadlines" && <DeadlinesScreen />}
       {view.name === "calendar" && <CalendarScreen />}
+      {view.name === "vendors" && <VendorsScreen />}
       {view.name === "case" && <CaseDetailScreen id={view.id} />}
     </main>
   );
