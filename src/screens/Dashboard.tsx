@@ -11,6 +11,7 @@ const PURPLE = "#5c1f9e";
 export function Dashboard() {
   const { navigate } = useApp();
   const [bannerOpen, setBannerOpen] = useState(true);
+  const [pushOpen, setPushOpen] = useState(false);
 
   return (
     <div className="space-y-5 animate-fade-up">
