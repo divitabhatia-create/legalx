@@ -6,7 +6,7 @@ import { DeadlinesScreen } from "@/screens/DeadlinesScreen";
 import { CalendarScreen } from "@/screens/CalendarScreen";
 import { CaseDetailScreen } from "@/screens/CaseDetailScreen";
 import { CreateCaseModal } from "@/components/CreateCaseModal";
-import { VendorsScreen } from "@/screens/VendorsScreen";
+
 
 function Router() {
   const { view } = useApp();
