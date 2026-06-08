@@ -8,7 +8,6 @@ const NAV: { label: string; view: View }[] = [
   { label: "Cases", view: { name: "cases" } },
   { label: "Deadlines", view: { name: "deadlines" } },
   { label: "Calendar", view: { name: "calendar" } },
-  { label: "Vendors", view: { name: "vendors" } },
 ];
 
 const NOTIFICATIONS = [
