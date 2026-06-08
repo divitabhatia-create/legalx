@@ -31,7 +31,15 @@ export function Dashboard() {
         <Kpi label="Total Active Cases" value={215} top="#1e4d8c" />
         <Kpi label="Avg Sec 17 Interim Order Days" value={36} suffix=" days" top="#92400e" />
         <Kpi label="RoR" value={2.15} suffix="%" decimals={2} top="#166534" sub="Duration: 73 days" />
-        <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Lac" decimals={2} top="#c0392b" />
+        <Kpi label="POS (Principal Outstanding)" value={6.12} prefix="₹" suffix=" Cr" decimals={2} top="#c0392b" />
+      </div>
+
+      {/* Vendor KPIs */}
+      <div className="grid grid-cols-4 gap-4">
+        <Kpi label="Active Vendors" value={4} top="#5c1f9e" />
+        <Kpi label="Avg Award TAT" value={45} suffix=" days" top="#1a4d8c" />
+        <Kpi label="Cases Pushed This Month" value={180} top="#0d6e6e" />
+        <KpiVendor label="Top Performer" name="Cadre" avatar="CD" color="#145c38" top="#145c38" />
       </div>
 
       {/* Pipeline + Deadlines */}
@@ -46,6 +54,110 @@ export function Dashboard() {
         <AwardOutcomes />
         <RecentActivity />
       </div>
+
+      <VendorPerformanceSection onPush={() => setPushOpen(true)} />
+      <LastAssignmentActivity />
+
+      <PushCasesModal open={pushOpen} onClose={() => setPushOpen(false)} />
+    </div>
+  );
+}
+
+function KpiVendor({ label, name, avatar, color, top }: { label: string; name: string; avatar: string; color: string; top: string }) {
+  return (
+    <div className="bg-card border border-line-card rounded-[11px] card-shadow overflow-hidden">
+      <div className="h-[3px]" style={{ background: top }} />
+      <div className="p-4">
+        <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">{label}</div>
+        <div className="mt-2 flex items-center gap-2">
+          <div className="w-8 h-8 rounded-md grid place-items-center text-white font-bold text-[12px]" style={{ background: color }}>{avatar}</div>
+          <div className="font-serif text-[22px] font-bold text-ink-body leading-none">{name}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function VendorPerformanceSection({ onPush }: { onPush: () => void }) {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-end justify-between">
+        <div>
+          <h3 className="font-serif font-bold text-[18px] text-ink-body">Vendor Performance</h3>
+          <div className="text-[12px] text-ink-muted">Compare ODR vendors and push cases</div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={onPush}
+            className="h-9 px-4 rounded-md text-white text-[12.5px] font-semibold flex items-center gap-1.5 hover:brightness-110 transition"
+            style={{ background: PURPLE }}>
+            Push Cases <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          <button className="h-9 px-4 rounded-md border border-line-card text-[12.5px] font-semibold text-ink-body flex items-center gap-1.5 hover:bg-surface-input transition">
+            <Upload className="w-3.5 h-3.5" /> Upload Resolution Data
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {VENDORS.map(v => (
+          <div key={v.id} className="bg-card border border-line-card rounded-[12px] p-4 card-shadow hover:-translate-y-0.5 transition">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-9 h-9 rounded-[9px] grid place-items-center text-white font-bold text-[12px]" style={{ background: v.color }}>{v.avatar}</div>
+              <div>
+                <div className="text-[13.5px] font-bold text-ink-body">{v.name}</div>
+                <div className="text-[10.5px] text-ink-muted">ODR Institution</div>
+              </div>
+            </div>
+            <div className="border-t border-line-card pt-3 pb-3 flex items-baseline justify-between">
+              <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Section 17 TAT</div>
+              <div><span className="font-serif font-bold text-[20px] text-ink-body">{v.sec17}</span><span className="text-[11px] text-ink-muted ml-1">days</span></div>
+            </div>
+            <div className="border-t border-line-card pt-3 pb-3 flex items-baseline justify-between">
+              <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Arbitral Award TAT</div>
+              <div><span className="font-serif font-bold text-[20px] text-ink-body">{v.award}</span><span className="text-[11px] text-ink-muted ml-1">days</span></div>
+            </div>
+            <div className="border-t border-line-card pt-3">
+              <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold mb-1.5">Contested vs Ex-parte</div>
+              <div className="flex h-1.5 rounded-full overflow-hidden bg-surface-input">
+                <div style={{ width: `${v.contested}%`, background: "#1a4d8c" }} />
+                <div style={{ width: `${v.exparte}%`, background: "#cbc7be" }} />
+              </div>
+              <div className="flex justify-between mt-1.5 text-[11px]">
+                <span style={{ color: "#1a4d8c" }} className="font-semibold">{v.contested}% contested</span>
+                <span className="text-ink-muted font-semibold">{v.exparte}% ex-parte</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LastAssignmentActivity() {
+  const items = [
+    { time: "10 mins ago", text: "Pushed 38 cases to Cadre & WeVaad" },
+    { time: "Yesterday", text: "Pushed 12 cases to PrivateCourt" },
+    { time: "2 days ago", text: "Pushed 18 cases to Webnyay" },
+  ];
+  return (
+    <div className="bg-card border border-line-card rounded-[12px] p-5 card-shadow">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-serif font-bold text-[15px] text-ink-body">Last Assignment Activity</h3>
+        <button className="text-[12px] font-semibold hover:underline" style={{ color: PURPLE }}>
+          View all assignment history →
+        </button>
+      </div>
+      <ul className="space-y-2">
+        {items.map((it, i) => (
+          <li key={i} className="flex items-center gap-3 bg-surface-input rounded-md px-3 py-2">
+            <span className="text-[14px]">📤</span>
+            <span className="text-[11px] text-ink-muted">{it.time}</span>
+            <span className="text-[12.5px] text-ink-body flex-1">{it.text}</span>
+            <span className="px-2 py-0.5 rounded-full bg-brand-green-light text-[#145c38] text-[10.5px] font-semibold">✓ Delivered</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
