@@ -6,7 +6,6 @@ export type View =
   | { name: "cases"; stageFilter?: Stage }
   | { name: "deadlines" }
   | { name: "calendar" }
-  | { name: "vendors" }
   | { name: "case"; id: string };
 
 interface AppCtx {
