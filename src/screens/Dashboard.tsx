@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Upload, ArrowRight } from "lucide-react";
 import { useApp } from "@/state/AppContext";
 import { CountUp } from "@/components/CountUp";
 import { STAGE_FUNNEL, DEADLINES } from "@/data/cases";
 import { cn } from "@/lib/utils";
+import { PushCasesModal, VENDORS } from "@/components/PushCasesModal";
+
+const PURPLE = "#5c1f9e";
 
 export function Dashboard() {
   const { navigate } = useApp();
