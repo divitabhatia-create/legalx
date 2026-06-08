@@ -16,7 +16,6 @@ function Router() {
       {view.name === "cases" && <CasesScreen />}
       {view.name === "deadlines" && <DeadlinesScreen />}
       {view.name === "calendar" && <CalendarScreen />}
-      {view.name === "vendors" && <VendorsScreen />}
       {view.name === "case" && <CaseDetailScreen id={view.id} />}
     </main>
   );
