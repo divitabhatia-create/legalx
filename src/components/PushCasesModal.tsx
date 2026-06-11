@@ -50,7 +50,7 @@ export function PushCasesModal({ open, onClose }: { open: boolean; onClose: () =
   const [extras, setExtras] = useState<Record<string, number>>({ wv: 0, cd: 0, wn: 0, pc: 0 });
   const [pushed, setPushed] = useState<Record<string, number> | null>(null);
 
-  if (!open) return null;
+  
 
   const total = rows.length;
   const earmarkedRows = rows.filter(r => r.earmarked);
@@ -126,6 +126,8 @@ export function PushCasesModal({ open, onClose }: { open: boolean; onClose: () =
   const close = () => { reset(); onClose(); };
 
   const canContinueStep3 = mode === "equal" ? extrasAssigned === extraTotal : mode === "custom" ? customTotal === remaining : true;
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-stretch overflow-y-auto">
