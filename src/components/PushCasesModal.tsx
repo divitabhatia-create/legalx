@@ -50,7 +50,7 @@ export function PushCasesModal({ open, onClose }: { open: boolean; onClose: () =
   const [extras, setExtras] = useState<Record<string, number>>({ wv: 0, cd: 0, wn: 0, pc: 0 });
   const [pushed, setPushed] = useState<Record<string, number> | null>(null);
 
-  if (!open) return null;
+  
 
   const total = rows.length;
   const earmarkedRows = rows.filter(r => r.earmarked);
