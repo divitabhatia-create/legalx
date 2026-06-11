@@ -127,6 +127,8 @@ export function PushCasesModal({ open, onClose }: { open: boolean; onClose: () =
 
   const canContinueStep3 = mode === "equal" ? extrasAssigned === extraTotal : mode === "custom" ? customTotal === remaining : true;
 
+  if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-stretch overflow-y-auto">
       <div className="bg-background w-full min-h-screen animate-fade-up">
