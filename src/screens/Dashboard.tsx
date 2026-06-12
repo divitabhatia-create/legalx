@@ -38,8 +38,8 @@ export function Dashboard() {
       <div className="grid grid-cols-4 gap-4">
         <Kpi label="Active Vendors" value={4} top="#5c1f9e" />
         <Kpi label="Avg Award TAT" value={45} suffix=" days" top="#1a4d8c" />
-        <Kpi label="Cases Pushed This Month" value={180} top="#0d6e6e" />
-        <KpiVendor label="Top Performer" name="Cadre" avatar="CD" color="#145c38" top="#145c38" />
+        <Kpi label="Settlement Rate" value={25.3} suffix="%" decimals={1} top="#0d6e6e" sub="Powered by MIS report" />
+        <Kpi label="Avg Borrower Engagement" value={68.7} suffix="%" decimals={1} top="#145c38" />
       </div>
 
       {/* Pipeline + Deadlines */}
