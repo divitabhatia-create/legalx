@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 const PURPLE = "#5c1f9e";
 
 export const VENDORS = [
-  { id: "wv", name: "WeVaad",       avatar: "WV", color: "#185FA5", sec17: 9,  award: 42, contested: 35, exparte: 65 },
-  { id: "cd", name: "Cadre",        avatar: "CD", color: "#0F6E56", sec17: 7,  award: 38, contested: 48, exparte: 52 },
-  { id: "wn", name: "Webnyay",      avatar: "WN", color: "#534AB7", sec17: 11, award: 51, contested: 28, exparte: 72 },
-  { id: "pc", name: "PrivateCourt", avatar: "PC", color: "#993C1D", sec17: 8,  award: 45, contested: 41, exparte: 59 },
+  { id: "wv", name: "WeVaad",       avatar: "WV", color: "#185FA5", sec17: 9,  award: 42, contested: 35, exparte: 65, engagement: 68, settlement: 22 },
+  { id: "cd", name: "Cadre",        avatar: "CD", color: "#0F6E56", sec17: 7,  award: 38, contested: 48, exparte: 52, engagement: 81, settlement: 34 },
+  { id: "wn", name: "Webnyay",      avatar: "WN", color: "#534AB7", sec17: 11, award: 51, contested: 28, exparte: 72, engagement: 54, settlement: 17 },
+  { id: "pc", name: "PrivateCourt", avatar: "PC", color: "#993C1D", sec17: 8,  award: 45, contested: 41, exparte: 59, engagement: 72, settlement: 28 },
 ];
 
 interface Row {

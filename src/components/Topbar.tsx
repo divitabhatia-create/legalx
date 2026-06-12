@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
-import { Bell, Search, User, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Bell, Search, User, Plus, Upload } from "lucide-react";
 import { useApp, View } from "@/state/AppContext";
 import { cn } from "@/lib/utils";
+import { UploadMisModal } from "@/components/UploadMisModal";
 
 const NAV: { label: string; view: View }[] = [
   { label: "Dashboard", view: { name: "dashboard" } },
@@ -18,6 +19,7 @@ const NOTIFICATIONS = [
 
 export function Topbar() {
   const { view, navigate, notifOpen, setNotifOpen, notifSeen, markNotifSeen, setCreateOpen } = useApp();
+  const [misOpen, setMisOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,10 +74,17 @@ export function Topbar() {
         </div>
 
         <button
+          onClick={() => setMisOpen(true)}
+          className="h-9 px-3 rounded-md border border-line-card text-[12.5px] font-semibold text-ink-body flex items-center gap-1.5 hover:bg-surface-input transition"
+        >
+          <Upload className="w-3.5 h-3.5" /> Upload MIS Report
+        </button>
+
+        <button
           onClick={() => setCreateOpen(true)}
           className="h-9 px-4 rounded-md bg-brand-red text-white text-[12.5px] font-semibold flex items-center gap-1.5 hover:brightness-110 transition"
         >
-          <Plus className="w-3.5 h-3.5" /> Create Case
+          <Plus className="w-3.5 h-3.5" /> Add Case
         </button>
 
         {/* Bell */}
@@ -106,6 +115,7 @@ export function Topbar() {
           <User className="w-4 h-4 text-ink-light" />
         </button>
       </div>
+      <UploadMisModal open={misOpen} onClose={() => setMisOpen(false)} />
     </header>
   );
 }
