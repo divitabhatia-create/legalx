@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
-import { Bell, Search, User, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Bell, Search, User, Plus, Upload } from "lucide-react";
 import { useApp, View } from "@/state/AppContext";
 import { cn } from "@/lib/utils";
+import { UploadMisModal } from "@/components/UploadMisModal";
 
 const NAV: { label: string; view: View }[] = [
   { label: "Dashboard", view: { name: "dashboard" } },
