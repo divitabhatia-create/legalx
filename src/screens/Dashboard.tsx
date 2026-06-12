@@ -116,6 +116,24 @@ function VendorPerformanceSection({ onPush }: { onPush: () => void }) {
               <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Arbitral Award TAT</div>
               <div><span className="font-serif font-bold text-[20px] text-ink-body">{v.award}</span><span className="text-[11px] text-ink-muted ml-1">days</span></div>
             </div>
+            <div className="border-t border-line-card pt-3 pb-3">
+              <div className="flex items-baseline justify-between mb-1.5">
+                <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Borrower Engagement</div>
+                <div><span className="font-serif font-bold text-[18px] text-ink-body">{v.engagement}</span><span className="text-[11px] text-ink-muted ml-0.5">%</span></div>
+              </div>
+              <div className="h-1.5 rounded-full bg-surface-input overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${v.engagement}%`, background: PURPLE }} />
+              </div>
+            </div>
+            <div className="border-t border-line-card pt-3 pb-3">
+              <div className="flex items-baseline justify-between mb-1.5">
+                <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Settlement Rate</div>
+                <div><span className="font-serif font-bold text-[18px] text-ink-body">{v.settlement}</span><span className="text-[11px] text-ink-muted ml-0.5">%</span></div>
+              </div>
+              <div className="h-1.5 rounded-full bg-surface-input overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${v.settlement}%`, background: "#0d6e6e" }} />
+              </div>
+            </div>
             <div className="border-t border-line-card pt-3">
               <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold mb-1.5">Contested vs Ex-parte</div>
               <div className="flex h-1.5 rounded-full overflow-hidden bg-surface-input">
