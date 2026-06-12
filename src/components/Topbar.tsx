@@ -115,6 +115,7 @@ export function Topbar() {
           <User className="w-4 h-4 text-ink-light" />
         </button>
       </div>
+      <UploadMisModal open={misOpen} onClose={() => setMisOpen(false)} />
     </header>
   );
 }
