@@ -19,6 +19,7 @@ const NOTIFICATIONS = [
 
 export function Topbar() {
   const { view, navigate, notifOpen, setNotifOpen, notifSeen, markNotifSeen, setCreateOpen } = useApp();
+  const [misOpen, setMisOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
