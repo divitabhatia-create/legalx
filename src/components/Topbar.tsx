@@ -74,10 +74,17 @@ export function Topbar() {
         </div>
 
         <button
+          onClick={() => setMisOpen(true)}
+          className="h-9 px-3 rounded-md border border-line-card text-[12.5px] font-semibold text-ink-body flex items-center gap-1.5 hover:bg-surface-input transition"
+        >
+          <Upload className="w-3.5 h-3.5" /> Upload MIS Report
+        </button>
+
+        <button
           onClick={() => setCreateOpen(true)}
           className="h-9 px-4 rounded-md bg-brand-red text-white text-[12.5px] font-semibold flex items-center gap-1.5 hover:brightness-110 transition"
         >
-          <Plus className="w-3.5 h-3.5" /> Create Case
+          <Plus className="w-3.5 h-3.5" /> Add Case
         </button>
 
         {/* Bell */}
