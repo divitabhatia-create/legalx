@@ -29,7 +29,10 @@ const SEEDED_HEARINGS: Hearing[] = [
 
 export function HearingCalendar({ standalone = false }: { standalone?: boolean }) {
   const { cases } = useApp();
-  const allHearings = useMemo(() => cases.flatMap(c => c.hearings), [cases]);
+  const allHearings = useMemo(
+    () => [...cases.flatMap(c => c.hearings), ...SEEDED_HEARINGS],
+    [cases]
+  );
   const [active, setActive] = useState("2026-03-06");
 
   const hearingsForDay = (d: string) => allHearings.filter(h => h.date === d);
