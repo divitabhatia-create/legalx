@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { ArrowLeft, Copy, Check, ChevronRight, Download, FileText, User2, Phone, Mail } from "lucide-react";
+import { ArrowLeft, Copy, Check, ChevronRight, Download, FileText, User2, Phone, Mail,
+  FileSignature, ScrollText, Receipt, Gavel, ClipboardList, Landmark, FileCheck2, Eye,
+  UserPlus, Video, Users, Award as AwardIcon, RefreshCw, Bell, Paperclip } from "lucide-react";
 import { useApp } from "@/state/AppContext";
-import { CaseRecord, Stage } from "@/data/cases";
+import { CaseRecord, Stage, TimelineEvent } from "@/data/cases";
 import { StatusBadge } from "@/components/StatusBadge";
+import { DocumentPreviewModal } from "@/components/DocumentPreviewModal";
 import { cn } from "@/lib/utils";
 
 const TABS = ["Overview", "Claimants", "Respondents", "Officers", "Documents", "Timeline"] as const;
