@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { ArrowLeft, Copy, Check, ChevronRight, Download, FileText, User2, Phone, Mail } from "lucide-react";
+import { ArrowLeft, Copy, Check, ChevronRight, Download, FileText, User2, Phone, Mail,
+  FileSignature, ScrollText, Receipt, Gavel, ClipboardList, Landmark, FileCheck2, Eye,
+  UserPlus, Video, Users, Award as AwardIcon, RefreshCw, Bell, Paperclip } from "lucide-react";
 import { useApp } from "@/state/AppContext";
-import { CaseRecord, Stage } from "@/data/cases";
+import { CaseRecord, Stage, TimelineEvent } from "@/data/cases";
 import { StatusBadge } from "@/components/StatusBadge";
+import { DocumentPreviewModal } from "@/components/DocumentPreviewModal";
 import { cn } from "@/lib/utils";
 
 const TABS = ["Overview", "Claimants", "Respondents", "Officers", "Documents", "Timeline"] as const;
@@ -272,55 +275,233 @@ function OfficersTab({ c }: { c: CaseRecord }) {
 }
 
 /* ---------- DOCUMENTS ---------- */
+/* ---------- DOCUMENTS ---------- */
+const DOC_TYPE_STYLE: Record<string, { bg: string; fg: string; badge: string; icon: any; label: string }> = {
+  loan_application: { bg: "bg-brand-blue-light/50",  fg: "text-brand-blue-dark",  badge: "bg-brand-blue-light text-brand-blue-dark",  icon: FileSignature, label: "Loan Application" },
+  loan_agreement:   { bg: "bg-brand-purple-light/40", fg: "text-brand-purple",    badge: "bg-brand-purple-light text-brand-purple",   icon: ScrollText,    label: "Loan Agreement" },
+  agreement:        { bg: "bg-brand-purple-light/40", fg: "text-brand-purple",    badge: "bg-brand-purple-light text-brand-purple",   icon: ScrollText,    label: "Agreement" },
+  contract:         { bg: "bg-brand-purple-light/40", fg: "text-brand-purple",    badge: "bg-brand-purple-light text-brand-purple",   icon: ScrollText,    label: "Contract" },
+  soa:              { bg: "bg-brand-amber-light/40",  fg: "text-brand-amber-dark", badge: "bg-brand-amber-light text-brand-amber-dark", icon: Receipt,      label: "Statement of Account" },
+  lrn:              { bg: "bg-brand-green-light/40",  fg: "text-brand-green-dark", badge: "bg-brand-green-light text-brand-green-dark", icon: Bell,         label: "LRN" },
+  notice:           { bg: "bg-brand-green-light/40",  fg: "text-brand-green-dark", badge: "bg-brand-green-light text-brand-green-dark", icon: Bell,         label: "Notice" },
+  soc:              { bg: "bg-brand-red-light/40",    fg: "text-brand-red-dark",   badge: "bg-brand-red-light text-brand-red-dark",     icon: ClipboardList, label: "Statement of Claim" },
+  sec17:            { bg: "bg-brand-red-light/40",    fg: "text-brand-red-dark",   badge: "bg-brand-red-light text-brand-red-dark",     icon: Gavel,        label: "Sec 17 Application" },
+  order:            { bg: "bg-brand-red-light/40",    fg: "text-brand-red-dark",   badge: "bg-brand-red-light text-brand-red-dark",     icon: Gavel,        label: "Order" },
+  expert:           { bg: "bg-brand-blue-light/40",   fg: "text-brand-blue-dark",  badge: "bg-brand-blue-light text-brand-blue-dark",   icon: FileText,     label: "Expert Report" },
+  evidence:         { bg: "bg-brand-blue-light/40",   fg: "text-brand-blue-dark",  badge: "bg-brand-blue-light text-brand-blue-dark",   icon: FileText,     label: "Evidence" },
+  arguments:        { bg: "bg-brand-amber-light/40",  fg: "text-brand-amber-dark", badge: "bg-brand-amber-light text-brand-amber-dark", icon: FileCheck2,   label: "Final Arguments" },
+};
+const DOC_FALLBACK = { bg: "bg-surface-input", fg: "text-ink-light", badge: "bg-surface-subtle text-ink-light", icon: FileText, label: "Document" };
+
+function cleanDocName(raw: string, type: string) {
+  // Strip leading LAN-like id + _LDCRIGHT_ or campaign prefix, replace underscores.
+  let n = raw.replace(/^CRFLAN\d+_?/i, "").replace(/^LDCRIGHT_/i, "");
+  n = n.replace(/_/g, " ").trim();
+  if (!n || n.toLowerCase() === type.replace(/_/g, " ")) {
+    n = (DOC_TYPE_STYLE[type]?.label || "Document");
+  }
+  return n.replace(/\b\w/g, s => s.toUpperCase());
+}
+
 function DocumentsTab({ c }: { c: CaseRecord }) {
+  const [preview, setPreview] = useState<{ name: string; type: string } | null>(null);
   return (
     <div>
       <h3 className="font-serif font-bold text-[15px] text-ink-body mb-3">📁 Case Documents {c.documents.length}</h3>
-      <ul className="rounded-md border border-line-card overflow-hidden">
-        {c.documents.map((d, i) => (
-          <li key={i} className={cn("flex items-center gap-3 px-3 py-2.5", i % 2 === 0 ? "bg-card" : "bg-surface-input")}>
-            <div className="w-8 h-8 rounded bg-brand-red-light grid place-items-center">
-              <FileText className="w-4 h-4 text-brand-red-dark" />
+      {c.documents.length === 0 && (
+        <div className="border border-dashed border-line-card rounded-[11px] p-8 text-center text-ink-muted text-[12.5px]">
+          No documents uploaded for this case yet.
+        </div>
+      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {c.documents.map((d, i) => {
+          const style = DOC_TYPE_STYLE[d.type] || DOC_FALLBACK;
+          const Icon = style.icon;
+          const displayName = cleanDocName(d.name, d.type);
+          return (
+            <div key={i} className={cn("rounded-[11px] border border-line-card p-3.5 flex items-center gap-3", style.bg)}>
+              <div className={cn("w-10 h-10 rounded-[9px] grid place-items-center bg-card border border-line-card", style.fg)}>
+                <Icon className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-[13px] text-ink-body truncate">{displayName}</div>
+                <div className="mt-1 flex items-center gap-1.5">
+                  <span className={cn("px-1.5 py-0.5 rounded text-[9.5px] font-bold uppercase tracking-wide", style.badge)}>{style.label}</span>
+                  <span className="text-[10.5px] text-ink-muted">PDF</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setPreview({ name: displayName, type: style.label })}
+                className="h-8 px-2.5 rounded-md bg-card border border-line-card text-ink-light text-[11.5px] font-semibold hover:bg-surface-subtle flex items-center gap-1">
+                <Eye className="w-3.5 h-3.5" /> Preview
+              </button>
+              <a
+                href="/sample-document.pdf" download={`${displayName}.pdf`}
+                className="h-8 w-8 grid place-items-center rounded-md bg-card border border-line-card text-ink-light hover:bg-surface-subtle">
+                <Download className="w-3.5 h-3.5" />
+              </a>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-[12.5px] text-ink-body truncate">{d.name}</div>
-              <div className="text-[11px] text-ink-muted">{d.type} · N/A · N/A</div>
-            </div>
-            <button className="w-7 h-7 grid place-items-center rounded hover:bg-surface-subtle text-ink-muted">
-              <Download className="w-4 h-4" />
-            </button>
-          </li>
-        ))}
-        {c.documents.length === 0 && <li className="px-4 py-6 text-center text-ink-muted text-[12px]">No documents.</li>}
-      </ul>
+          );
+        })}
+      </div>
+      <DocumentPreviewModal
+        open={!!preview}
+        onClose={() => setPreview(null)}
+        name={preview?.name || ""}
+        type={preview?.type || ""}
+      />
     </div>
   );
 }
 
 /* ---------- TIMELINE ---------- */
+type EventKind = "assignment" | "order" | "hearing" | "award" | "status" | "notice" | "note";
+
+function classifyEvent(t: TimelineEvent): EventKind {
+  const e = (t.event + " " + (t.detail || "")).toLowerCase();
+  if (/allocat|assign|appoint|arbitrator|officer/.test(e)) return "assignment";
+  if (/award/.test(e)) return "award";
+  if (/hearing|cross|argument|evidence/.test(e)) return "hearing";
+  if (/order|sec\s?17|interim/.test(e)) return "order";
+  if (/status|withdraw|hold|close|reopen/.test(e)) return "status";
+  if (/notice|nta|sec\s?21|communication|sms|email/.test(e)) return "notice";
+  return "note";
+}
+
+const KIND_META: Record<EventKind, { icon: any; color: string; bg: string; label: string }> = {
+  assignment: { icon: UserPlus,    color: "#1a4d8c", bg: "#1a4d8c14", label: "Assignment" },
+  order:      { icon: Gavel,       color: "#5c1f9e", bg: "#5c1f9e14", label: "Order / Document" },
+  hearing:    { icon: Video,       color: "#0d6e6e", bg: "#0d6e6e14", label: "Hearing" },
+  award:      { icon: AwardIcon,   color: "#166534", bg: "#16653414", label: "Award" },
+  status:     { icon: RefreshCw,   color: "#92400e", bg: "#92400e14", label: "Status Change" },
+  notice:     { icon: Bell,        color: "#c0392b", bg: "#c0392b14", label: "Notice" },
+  note:       { icon: FileText,    color: "#5a3a1b", bg: "#5a3a1b14", label: "Note" },
+};
+
+// Detect an attached filename referenced in the event/detail
+function extractAttachment(t: TimelineEvent): string | null {
+  const src = `${t.event} ${t.detail || ""}`;
+  const m = src.match(/([A-Za-z0-9_\-]+\.(pdf|docx?|jpg|png))/i);
+  if (m) return m[1];
+  const e = t.event.toLowerCase();
+  if (/first order|interim award|final award|award|order/.test(e)) {
+    return `${t.event.replace(/\s+/g, "_")}.pdf`;
+  }
+  return null;
+}
+
+// Detect meeting info in a hearing detail
+function extractMeeting(t: TimelineEvent) {
+  const src = `${t.event} ${t.detail || ""}`;
+  const mode = /zoom|virtual|google meet|webex/i.test(src) ? "Zoom"
+             : /in[-\s]?person|chamber|court|centre/i.test(src) ? "In-person" : null;
+  const id = src.match(/(?:meeting\s*id[:\s]*)?(\d{3}[-\s]?\d{3,4}[-\s]?\d{3,4})/i);
+  const client = src.match(/client[:\s]+([A-Z][A-Z\s]+)/);
+  return { mode, meetingId: id?.[1] || null, client: client?.[1] || null };
+}
+
 function TimelineTab({ c }: { c: CaseRecord }) {
+  const [preview, setPreview] = useState<{ name: string; type: string } | null>(null);
   return (
     <div>
-      <h3 className="font-serif font-bold text-[15px] text-ink-body mb-3">🕐 Case Timeline</h3>
-      <div className="relative pl-6">
-        <div className="absolute left-2 top-2 bottom-2 w-[2px] bg-brand-purple/40" />
-        <ul className="space-y-3">
-          {c.timeline.map((t, i) => (
-            <li key={i} className="relative">
-              <span className="absolute -left-[18px] top-3 w-3 h-3 rounded-full border-2 border-brand-purple bg-card grid place-items-center">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-purple" />
-              </span>
-              <div className="bg-card border border-line-card rounded-md p-3">
-                <div className="flex items-start gap-3">
-                  <div className="font-bold text-[12.5px] text-ink-body flex-1">{t.event}</div>
-                  <div className="text-[11px] text-ink-muted shrink-0">{t.ts}</div>
-                </div>
-                {t.detail && <div className="mt-1 text-[11.5px] text-ink-light">{t.detail}</div>}
-              </div>
-            </li>
-          ))}
+      <h3 className="font-serif font-bold text-[15px] text-ink-body mb-4">🕐 Case Timeline</h3>
+      {c.timeline.length === 0 && (
+        <div className="border border-dashed border-line-card rounded-[11px] p-8 text-center text-ink-muted text-[12.5px]">
+          No timeline events recorded.
+        </div>
+      )}
+      <div className="relative pl-8">
+        <div className="absolute left-[13px] top-2 bottom-2 w-[2px] bg-line-card" />
+        <ul className="space-y-4">
+          {c.timeline.map((t, i) => {
+            const kind = classifyEvent(t);
+            const meta = KIND_META[kind];
+            const Icon = meta.icon;
+            const isStatus = kind === "status";
+            const attachment = !isStatus ? extractAttachment(t) : null;
+            const meeting = kind === "hearing" ? extractMeeting(t) : null;
+
+            return (
+              <li key={i} className="relative">
+                <span
+                  className="absolute -left-[26px] top-2 w-7 h-7 rounded-full grid place-items-center border-2 border-card"
+                  style={{ background: meta.bg, color: meta.color }}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </span>
+
+                {isStatus ? (
+                  <div className="flex items-center gap-3 bg-card border border-line-card rounded-md px-3 py-2">
+                    <span className="px-2 py-0.5 rounded-full text-[10.5px] font-bold" style={{ background: meta.bg, color: meta.color }}>
+                      {meta.label}
+                    </span>
+                    <div className="text-[12.5px] font-semibold text-ink-body flex-1">{t.event}</div>
+                    <div className="text-[11px] text-ink-muted">{t.ts}</div>
+                  </div>
+                ) : (
+                  <div className="bg-card border border-line-card rounded-[10px] p-3.5">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-bold text-[13px] text-ink-body">{t.event}</span>
+                          <span className="px-1.5 py-0.5 rounded text-[9.5px] font-semibold uppercase tracking-wide"
+                                style={{ background: meta.bg, color: meta.color }}>
+                            {meta.label}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-[11px] text-ink-muted shrink-0">{t.ts}</div>
+                    </div>
+
+                    {t.detail && (
+                      <p className="mt-2 text-[12px] leading-relaxed text-ink-light whitespace-pre-wrap break-words">
+                        {t.detail}
+                      </p>
+                    )}
+
+                    {meeting && (meeting.mode || meeting.meetingId || meeting.client) && (
+                      <div className="mt-2.5 grid grid-cols-3 gap-2">
+                        {meeting.client && <Field icon={Users} label="Client" value={meeting.client} />}
+                        {meeting.mode && <Field icon={Video} label="Mode" value={meeting.mode} />}
+                        {meeting.meetingId && <Field icon={Video} label="Meeting ID" value={meeting.meetingId} />}
+                      </div>
+                    )}
+
+                    {attachment && (
+                      <button
+                        onClick={() => setPreview({ name: attachment, type: meta.label })}
+                        className="mt-2.5 inline-flex items-center gap-2 h-8 px-2.5 rounded-md border border-line-card bg-surface-input text-ink-body text-[11.5px] font-semibold hover:bg-surface-subtle"
+                      >
+                        <Paperclip className="w-3.5 h-3.5" style={{ color: meta.color }} />
+                        <span className="truncate max-w-[240px]">{attachment}</span>
+                        <Eye className="w-3.5 h-3.5 text-ink-muted" />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
+
+      <DocumentPreviewModal
+        open={!!preview}
+        onClose={() => setPreview(null)}
+        name={preview?.name || ""}
+        type={preview?.type || ""}
+      />
+    </div>
+  );
+}
+
+function Field({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
+  return (
+    <div className="bg-surface-input border border-line-card rounded-md px-2.5 py-1.5">
+      <div className="flex items-center gap-1 text-[9.5px] uppercase tracking-wide text-ink-muted font-semibold">
+        <Icon className="w-3 h-3" /> {label}
+      </div>
+      <div className="text-[12px] font-semibold text-ink-body truncate">{value}</div>
     </div>
   );
 }

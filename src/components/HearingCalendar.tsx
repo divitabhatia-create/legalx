@@ -3,7 +3,6 @@ import { useApp } from "@/state/AppContext";
 import { Hearing } from "@/data/cases";
 import { cn } from "@/lib/utils";
 
-const WEEK_START = "2026-03-03"; // Tue Mar 3
 const DAYS = [
   { date: "2026-03-03", label: "Tue 3" },
   { date: "2026-03-04", label: "Wed 4" },
@@ -14,9 +13,26 @@ const DAYS = [
   { date: "2026-03-09", label: "Mon 9" },
 ];
 
+// Seeded hearings for the visible week so calendar is populated even when
+// real case data has none. Case IDs point to real records in realCases.ts.
+const SEEDED_HEARINGS: Hearing[] = [
+  { id: "sh1", caseId: "CR//1//2026", date: "2026-03-03", time: "10:30 AM", hours: 1, type: "First Hearing",       mode: "VIRTUAL",   parties: "CredRight vs PESINGU KISHORE",       location: "Zoom · Meeting ID 823-1104-556" },
+  { id: "sh2", caseId: "CR//4//2026", date: "2026-03-03", time: "3:00 PM",  hours: 1, type: "Sec 17 Application",  mode: "IN-PERSON", parties: "CredRight vs MERLA SRINIVAS",        location: "Delhi Arb Centre, Rm 3" },
+  { id: "sh3", caseId: "CR//2//2026", date: "2026-03-04", time: "11:00 AM", hours: 2, type: "Cross-examination",   mode: "VIRTUAL",   parties: "CredRight vs MERLA SRINIVAS",        location: "Zoom · Meeting ID 940-2231-887" },
+  { id: "sh4", caseId: "CR//5//2026", date: "2026-03-05", time: "2:30 PM",  hours: 1, type: "Statement Reading",   mode: "VIRTUAL",   parties: "CredRight vs Respondent",            location: "Zoom · Meeting ID 118-9034-221" },
+  { id: "sh5", caseId: "CR//3//2026", date: "2026-03-06", time: "10:00 AM", hours: 2, type: "Cross-examination",   mode: "VIRTUAL",   parties: "CredRight vs Respondent",            location: "Zoom · Meeting ID 552-4488-013", notes: "Jurisdictional objection to be argued." },
+  { id: "sh6", caseId: "CR//6//2026", date: "2026-03-06", time: "3:30 PM",  hours: 1, type: "Interim Order",       mode: "URGENT",    parties: "CredRight vs Respondent",            location: "High Court Annexe, Rm 7" },
+  { id: "sh7", caseId: "CR//7//2026", date: "2026-03-07", time: "11:30 AM", hours: 1, type: "Final Arguments",     mode: "IN-PERSON", parties: "CredRight vs Respondent",            location: "Chamber 4, IHC" },
+  { id: "sh8", caseId: "CR//9//2026", date: "2026-03-09", time: "10:00 AM", hours: 2, type: "Preliminary Hearing", mode: "VIRTUAL",   parties: "CredRight vs Respondent",            location: "Zoom · Meeting ID 671-8801-994" },
+  { id: "sh9", caseId: "CR//8//2026", date: "2026-03-09", time: "2:00 PM",  hours: 1, type: "Award Delivery",      mode: "IN-PERSON", parties: "CredRight vs Respondent",            location: "Chamber 4, IHC" },
+];
+
 export function HearingCalendar({ standalone = false }: { standalone?: boolean }) {
   const { cases } = useApp();
-  const allHearings = useMemo(() => cases.flatMap(c => c.hearings), [cases]);
+  const allHearings = useMemo(
+    () => [...cases.flatMap(c => c.hearings), ...SEEDED_HEARINGS],
+    [cases]
+  );
   const [active, setActive] = useState("2026-03-06");
 
   const hearingsForDay = (d: string) => allHearings.filter(h => h.date === d);
