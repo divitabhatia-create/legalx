@@ -80,12 +80,13 @@ function KpiVendor({ label, name, avatar, color, top }: { label: string; name: s
 }
 
 function VendorPerformanceSection({ onPush }: { onPush: () => void }) {
+  const [selected, setSelected] = useState<typeof VENDORS[number] | null>(null);
   return (
     <div className="space-y-3">
       <div className="flex items-end justify-between">
         <div>
           <h3 className="font-serif font-bold text-[18px] text-ink-body">Vendor Performance</h3>
-          <div className="text-[12px] text-ink-muted">Compare ODR vendors and push cases</div>
+          <div className="text-[12px] text-ink-muted">Click any vendor to see full breakdown · push cases below</div>
         </div>
         <div className="flex gap-2">
           <button onClick={onPush}
@@ -101,13 +102,19 @@ function VendorPerformanceSection({ onPush }: { onPush: () => void }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {VENDORS.map(v => (
-          <div key={v.id} className="bg-card border border-line-card rounded-[12px] p-4 card-shadow hover:-translate-y-0.5 transition">
+          <button
+            key={v.id}
+            onClick={() => setSelected(v)}
+            className="text-left bg-card border border-line-card rounded-[12px] p-4 card-shadow cursor-pointer hover:-translate-y-0.5 hover:shadow-lg hover:border-[color:var(--tw-ring-color)] transition focus:outline-none focus:ring-2"
+            style={{ ["--tw-ring-color" as any]: PURPLE }}
+          >
             <div className="flex items-center gap-2.5 mb-3">
               <div className="w-9 h-9 rounded-[9px] grid place-items-center text-white font-bold text-[12px]" style={{ background: v.color }}>{v.avatar}</div>
-              <div>
+              <div className="flex-1">
                 <div className="text-[13.5px] font-bold text-ink-body">{v.name}</div>
                 <div className="text-[10.5px] text-ink-muted">ODR Institution</div>
               </div>
+              <ArrowRight className="w-3.5 h-3.5 text-ink-muted" />
             </div>
             <div className="border-t border-line-card pt-3 pb-3 flex items-baseline justify-between">
               <div className="text-[11px] uppercase tracking-wide text-ink-muted font-semibold">Section 17 TAT</div>
@@ -146,9 +153,10 @@ function VendorPerformanceSection({ onPush }: { onPush: () => void }) {
                 <span className="text-ink-muted font-semibold">{v.exparte}% ex-parte</span>
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
+      <VendorDetailModal vendor={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
