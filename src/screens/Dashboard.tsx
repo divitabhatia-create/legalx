@@ -5,6 +5,7 @@ import { CountUp } from "@/components/CountUp";
 import { STAGE_FUNNEL, DEADLINES } from "@/data/cases";
 import { cn } from "@/lib/utils";
 import { PushCasesModal, VENDORS } from "@/components/PushCasesModal";
+import { VendorDetailModal } from "@/components/VendorDetailModal";
 
 const PURPLE = "#5c1f9e";
 
